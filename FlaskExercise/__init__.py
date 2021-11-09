@@ -1,10 +1,13 @@
+import logging
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from config import Config
 
 app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
 wsgi_app = app.wsgi_app
+# TODO: Set the app's logger level to "warning"
+#   and any other necessary changes
+app.logger.setLevel(logging.WARNING)
+streamHandler = logging.StreamHandler()
+streamHandler.setLevel(logging.WARNING)
+app.logger.addHandler(streamHandler)
 
 import FlaskExercise.views
