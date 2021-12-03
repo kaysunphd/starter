@@ -12,10 +12,10 @@ def main(msg: func.ServiceBusMessage):
     logging.info('Python ServiceBus queue trigger processed message: %s',notification_id)
 
     # Get connection to database
-    connection = psycopg2.connect(host="migrate-db-server.postgres.database.azure.com",
-                            database="techconfdb",
-                            user="migrateudacityadmin@migrate-db-server",
-                            password="qwerty314!")
+    connection = psycopg2.connect(host='*******',
+                            database='*******',
+                            user='*******',
+                            password='*******')
     cursor = connection.cursor()
 
     try:
@@ -37,7 +37,7 @@ def main(msg: func.ServiceBusMessage):
                 subject='{}: {}'.format(first_name, notify_subject),
                 html_content=notify_message)
             try:
-                sg = SendGridAPIClient('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')
+                sg = SendGridAPIClient('******')
                 response = sg.send(message)
             except Exception as e:
                 print(e.message)
