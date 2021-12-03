@@ -67,7 +67,7 @@ def notification():
             db.session.add(notification)
             db.session.commit()
 
-            notify_id = '{}'.format(notification.id)
+            notify_id = '{}'.format(notification.id)  # needed for proper conversion.
             msg = Message(str(notify_id))
             queue_client.send(msg)
 

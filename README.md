@@ -63,9 +63,16 @@ Complete a month cost analysis of each Azure resource to give an estimate total 
 
 | Azure Resource | Service Tier | Monthly Cost |
 | ------------ | ------------ | ------------ |
-| *Azure Postgres Database* |     |              |
-| *Azure Service Bus*   |         |              |
-| ...                   |         |              |
+| *Azure Postgres Database* | Basic, 1 vCore(s), 5 GB, single server | $25.32 |
+| *Azure Service Bus*   | Basic | $0.05/million messaging operation |
+| *Azure App Service Plan* | Free | $0.00 |
+| *Azure Storage acount* | Standard/Hot, StorageV2 | $0.61 |
+| *Azure Function App* | Consumption (first million executions free) | $0.00 |
+| **Minimum Total Cost** | | **$25.98** |
 
 ## Architecture Explanation
-This is a placeholder section where you can provide an explanation and reasoning for your architecture selection for both the Azure Web App and Azure Function.
+The functions for the tech conference website, attendee registration and attendee notifications from confrence administrators via email, are simple enough and do not require much computing resources (< 14 GB RAM and < 4 vCPUs). As such, platform as a service (PaaS) like Azure Web App is ideal for this type of scenario. Setup is quick and easy, infrastructure is manaaged by Azure, and costs are lower than running on virtual machines. In the event more users are accessing the website, the Azure App Service Plan can scaled out (horizontal scaling) with more instances and vice versa. Additionally, if more computing resources are needed, scaling up (vertical scaling) is also managed within the App Service Plan.
+
+Whenever the conference administrators send a new notification to all attendees from the website, the previous method of looping through all the attendees to send out individual emails was taking too long, causing HTPP timeouts. Moving this notification functionality to a background process with Azure Functions triggered by a service bus queue ensures all attendee email messages are sent out without failure. Additionally, since Azure Functions is an event-driven, serverless compute service that is triggered only on-demand, there is efficiency, scalability and cost effectiveness. 
+
+With Azure Web App, being a PaaS, upfront infrastructure costs as well as costs for maintanence, are handled by Azure. Payment is only for the amount of resources used. For low traffic websites, there's a free tier which may be more than sufficient. With more traffic, scaling up and out are also managable within App Service Plan. The pay-as-you-go pricing also applies to Azure Functions, which charges for each execution beyond first million, and to Azure Service Bus, which charges for each message on per million basis. Overall for this application, the total costs are low.

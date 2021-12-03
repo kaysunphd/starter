@@ -12,10 +12,10 @@ def main(msg: func.ServiceBusMessage):
     logging.info('Python ServiceBus queue trigger processed message: %s',notification_id)
 
     # Get connection to database
-    connection = psycopg2.connect(host='*******',
-                            database='*******',
-                            user='*******',
-                            password='*******')
+    connection = psycopg2.connect(host="*****",
+                            database="*****",
+                            user="*****",
+                            password="*****")
     cursor = connection.cursor()
 
     try:
@@ -25,22 +25,22 @@ def main(msg: func.ServiceBusMessage):
         logging.info('Error with Notification ID: {}, Message: {}, Subject: {}'.format(notification_id, notify_message, notify_subject))
 
         # Get attendees email and name
-        cursor.execute('SELECT email, first_name, last_name FROM attendee;')
+        cursor.execute('SELECT email, first_name FROM attendee;')
         attendees = cursor.fetchall()
 
         # Loop through each attendee and send an email with a personalized subject
         # from https://app.sendgrid.com/guide/integrate/langs/python
-        for (email, first_name, last_name) in attendees:
+        for (email, first_name) in attendees:
             message = Mail(
                 from_email='nysuka@gmail.com',
                 to_emails=email,
                 subject='{}: {}'.format(first_name, notify_subject),
-                html_content=notify_message)
+                html_content='hi {}, {}'.format(first_name, notify_message))
             try:
                 sg = SendGridAPIClient('******')
                 response = sg.send(message)
             except Exception as e:
-                print(e.message)
+                logging.error(e.message)
 
         # Update the notification table by setting the completed date and updating the status with the total number of attendees notified
         complete_date = datetime.utcnow()
