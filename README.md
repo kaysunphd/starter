@@ -59,16 +59,16 @@ You will need to install the following locally:
 2. Re-deploy the web app to publish changes
 
 ## Monthly Cost Analysis
-Complete a month cost analysis of each Azure resource to give an estimate total cost using the table below:
+A monthly cost analysis (in USD) of each Azure resource to give an estimate total cost according to [Azure calculator](https://azure.microsoft.com/en-us/pricing/calculator/) in the table below:
 
 | Azure Resource | Service Tier | Monthly Cost |
 | ------------ | ------------ | ------------ |
-| *Azure Postgres Database* | Basic, 1 vCore(s), 5 GB, single server | $25.32 |
+| *Azure Postgres Database* | Single server/Basic Tier (Gen 5, 1 vCore, $24.82/month) x 1 selected + $0.10/GB/month x 5 GB selected + $0.10/GB/month x100 GB selected, Locally Redundant,  | $35.32 |
 | *Azure Service Bus*   | Basic | $0.05/million messaging operation |
-| *Azure App Service Plan* | Free | $0.00 |
-| *Azure Storage acount* | Standard/Hot, StorageV2 | $0.61 |
-| *Azure Function App* | Consumption (first million executions free) | $0.00 |
-| **Minimum Total Cost** | | **$25.98** |
+| *Azure App Service Plan* | Linux/Basic (B1: 1 Core, 1.75 GB RAM, 10 GB Storage, $13.14/month) x 1 selected | $13.14 |
+| *Azure Storage acount* | Standard/Hot, StorageV2 (store $0.02/GB/month + write and list/create container $0.05/10,000 operations/month + read and other operations $0.004/10,000 operations/month) | $0.13 |
+| *Azure Function App* | Consumption (first 400,000 GB/s of execution and 1 million executions free, beyond which $0.20/execution/month) | $0.00 |
+| **Estimated Total Cost** | | **$48.64** |
 
 ## Architecture Explanation
 The functions for the tech conference website, attendee registration and attendee notifications from confrence administrators via email, are simple enough and do not require much computing resources (< 14 GB RAM and < 4 vCPUs). As such, platform as a service (PaaS) like Azure Web App is ideal for this type of scenario. Setup is quick and easy, infrastructure is manaaged by Azure, and costs are lower than running on virtual machines. In the event more users are accessing the website, the Azure App Service Plan can scaled out (horizontal scaling) with more instances and vice versa. Additionally, if more computing resources are needed, scaling up (vertical scaling) is also managed within the App Service Plan.
