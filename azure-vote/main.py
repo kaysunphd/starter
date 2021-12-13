@@ -33,11 +33,11 @@ config_integration.trace_integrations(['logging'])
 config_integration.trace_integrations(['requests'])
 # Standard Logging
 logger = logging.getLogger(__name__)
-handler = AzureLogHandler(connection_string='InstrumentationKey=2d4cae5b-f661-4abf-aa1e-3287a33d51f0;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/')
+handler = AzureLogHandler(connection_string='InstrumentationKey=50664e82-7afd-4bb8-9185-34ab5b58d340;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/')
 handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
 logger.addHandler(handler)
 # Logging custom Events 
-logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=2d4cae5b-f661-4abf-aa1e-3287a33d51f0;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/'))
+logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=50664e82-7afd-4bb8-9185-34ab5b58d340;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/'))
 # Set the logging level
 logger.setLevel(logging.INFO)
 
@@ -46,7 +46,7 @@ logger.setLevel(logging.INFO)
 # exporter = # TODO: Setup exporter
 exporter = metrics_exporter.new_metrics_exporter(
 enable_standard_metrics=True,
-connection_string='InstrumentationKey=2d4cae5b-f661-4abf-aa1e-3287a33d51f0;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/')
+connection_string='InstrumentationKey=50664e82-7afd-4bb8-9185-34ab5b58d340;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/')
 view_manager.register_exporter(exporter)
 
 
@@ -54,7 +54,7 @@ view_manager.register_exporter(exporter)
 # tracer = # TODO: Setup tracer
 tracer = Tracer(
  exporter=AzureExporter(
-     connection_string='InstrumentationKey=2d4cae5b-f661-4abf-aa1e-3287a33d51f0;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/'),
+     connection_string='InstrumentationKey=50664e82-7afd-4bb8-9185-34ab5b58d340;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/'),
  sampler=ProbabilitySampler(1.0),
 )
 
@@ -64,7 +64,7 @@ app = Flask(__name__)
 # middleware = # TODO: Setup flask middleware
 middleware = FlaskMiddleware(
  app,
- exporter=AzureExporter(connection_string="InstrumentationKey=2d4cae5b-f661-4abf-aa1e-3287a33d51f0;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/"),
+ exporter=AzureExporter(connection_string="InstrumentationKey=50664e82-7afd-4bb8-9185-34ab5b58d340;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/"),
  sampler=ProbabilitySampler(rate=1.0)
 )
 
@@ -152,6 +152,6 @@ def index():
 
 if __name__ == "__main__":
     # comment line below when deploying to VMSS
-    # app.run() # local
+    app.run() # local
     # uncomment the line below before deployment to VMSS
-    app.run(host='0.0.0.0', threaded=True, debug=True) # remote
+    # app.run(host='0.0.0.0', threaded=True, debug=True) # remote
