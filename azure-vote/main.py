@@ -33,11 +33,11 @@ config_integration.trace_integrations(['logging'])
 config_integration.trace_integrations(['requests'])
 # Standard Logging
 logger = logging.getLogger(__name__)
-handler = AzureLogHandler(connection_string='InstrumentationKey=50664e82-7afd-4bb8-9185-34ab5b58d340;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/')
+handler = AzureLogHandler(connection_string='InstrumentationKey=b6d445b0-d90d-42bb-b07a-172039820218')
 handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
 logger.addHandler(handler)
 # Logging custom Events 
-logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=50664e82-7afd-4bb8-9185-34ab5b58d340;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/'))
+logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=b6d445b0-d90d-42bb-b07a-172039820218'))
 # Set the logging level
 logger.setLevel(logging.INFO)
 
@@ -46,7 +46,7 @@ logger.setLevel(logging.INFO)
 # exporter = # TODO: Setup exporter
 exporter = metrics_exporter.new_metrics_exporter(
 enable_standard_metrics=True,
-connection_string='InstrumentationKey=50664e82-7afd-4bb8-9185-34ab5b58d340;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/')
+connection_string='InstrumentationKey=b6d445b0-d90d-42bb-b07a-172039820218')
 view_manager.register_exporter(exporter)
 
 
@@ -54,7 +54,7 @@ view_manager.register_exporter(exporter)
 # tracer = # TODO: Setup tracer
 tracer = Tracer(
  exporter=AzureExporter(
-     connection_string='InstrumentationKey=50664e82-7afd-4bb8-9185-34ab5b58d340;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/'),
+     connection_string='InstrumentationKey=b6d445b0-d90d-42bb-b07a-172039820218'),
  sampler=ProbabilitySampler(1.0),
 )
 
@@ -64,7 +64,7 @@ app = Flask(__name__)
 # middleware = # TODO: Setup flask middleware
 middleware = FlaskMiddleware(
  app,
- exporter=AzureExporter(connection_string="InstrumentationKey=50664e82-7afd-4bb8-9185-34ab5b58d340;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/"),
+ exporter=AzureExporter(connection_string="InstrumentationKey=b6d445b0-d90d-42bb-b07a-172039820218"),
  sampler=ProbabilitySampler(rate=1.0)
 )
 
@@ -105,13 +105,11 @@ def index():
         # Get current values
         vote1 = r.get(button1).decode('utf-8')
         # TODO: use tracer object to trace cat vote
-        with tracer.span(name="Cats Vote") as span:
-            print("Cats Vote")
+        tracer.span(name="Cats Vote")
 
         vote2 = r.get(button2).decode('utf-8')
         # TODO: use tracer object to trace dog vote
-        with tracer.span(name="Dogs Vote") as span:
-                print("Dogs Vote")
+        tracer.span(name="Dogs Vote")
 
         # Return index with values
         return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
@@ -152,6 +150,6 @@ def index():
 
 if __name__ == "__main__":
     # comment line below when deploying to VMSS
-    app.run() # local
+    # app.run() # local
     # uncomment the line below before deployment to VMSS
-    # app.run(host='0.0.0.0', threaded=True, debug=True) # remote
+    app.run(host='0.0.0.0', threaded=True, debug=True) # remote
