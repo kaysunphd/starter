@@ -8,7 +8,6 @@ import logging
 from datetime import datetime
 
 # App Insights
-# TODO: Import required libraries for App Insights
 from opencensus.ext.azure.log_exporter import AzureLogHandler
 from opencensus.ext.azure.log_exporter import AzureEventHandler
 from opencensus.ext.azure import metrics_exporter
@@ -26,9 +25,6 @@ from opencensus.ext.flask.flask_middleware import FlaskMiddleware
 # For metrics
 stats = stats_module.stats
 view_manager = stats.view_manager
-
-config_integration.trace_integrations(['logging'])
-config_integration.trace_integrations(['requests'])
 
 # Logging
 logger = logging.getLogger(__name__)
