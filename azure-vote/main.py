@@ -26,9 +26,6 @@ from opencensus.ext.flask.flask_middleware import FlaskMiddleware
 stats = stats_module.stats
 view_manager = stats.view_manager
 
-config_integration.trace_integrations(['logging'])
-config_integration.trace_integrations(['requests'])
-
 # Logging
 logger = logging.getLogger(__name__)
 handler = AzureLogHandler(connection_string='InstrumentationKey=b6d445b0-d90d-42bb-b07a-172039820218')
